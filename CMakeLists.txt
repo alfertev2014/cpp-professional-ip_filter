@@ -23,6 +23,7 @@ option(WITH_TEST "Whether to build tests" ON)
 configure_file(version.h.in version.h)
 
 add_library(ip_filter_lib ip_filter.cpp)
+target_include_directories(ip_filter_lib PUBLIC .)
 
 add_executable(ip_filter main.cpp)
 target_include_directories(ip_filter PRIVATE "${CMAKE_BINARY_DIR}")
