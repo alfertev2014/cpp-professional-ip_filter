@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <sstream>
 
 namespace {
     std::uint8_t str2byte(const std::string& s) {
@@ -25,5 +26,14 @@ namespace ip_filter {
             return { str2byte(splitted[0]), str2byte(splitted[1]), str2byte(splitted[2]), str2byte(splitted[3]) };
         }
         return {};
+    }
+
+    std::string printIp(const IpAddress& ip) {
+        std::stringstream ss;
+        ss << static_cast<unsigned>(ip.bytes[0]) << '.'
+            << static_cast<unsigned>(ip.bytes[1]) << '.'
+            << static_cast<unsigned>(ip.bytes[2]) << '.'
+            << static_cast<unsigned>(ip.bytes[3]);
+        return ss.str();
     }
 }

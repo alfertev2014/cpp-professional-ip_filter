@@ -7,6 +7,9 @@
 
 namespace ip_filter {
 
+    // We could simply use
+    // using IpAddress = std::array<std::uint8_t, 4>;
+
     struct IpAddress {
         std::array<std::uint8_t, 4> bytes;
 
@@ -14,20 +17,36 @@ namespace ip_filter {
         IpAddress(std::uint8_t b1, std::uint8_t b2, std::uint8_t b3, std::uint8_t b4)
             : bytes { b1, b2, b3, b4 } {}
 
-        bool operator==(const IpAddress& other) const {
+        inline bool operator==(const IpAddress& other) const {
             return bytes == other.bytes;
         }
 
-        bool operator!=(const IpAddress& other) const {
-            return !operator==(other);
+        inline bool operator!=(const IpAddress& other) const {
+            return bytes != other.bytes;
         }
+
+        inline bool operator<(const IpAddress& other) const {
+            return bytes < other.bytes;
+        }
+
+        inline bool operator>(const IpAddress& other) const {
+            return bytes > other.bytes;
+        }
+
+        inline bool operator<=(const IpAddress& other) const {
+            return bytes <= other.bytes;
+        }
+
+        inline bool operator>=(const IpAddress& other) const {
+            return bytes >= other.bytes;
+        }
+
+        // We have no operator<=> in C++17 :(
     };
 
     IpAddress parseIp(std::string_view ipStr);
 
-    IpAddress parseIpLine(std::string_view ipLine);
-
     std::string printIp(const IpAddress& ip);
 
-    
+
 }
