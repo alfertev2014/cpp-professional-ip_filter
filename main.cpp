@@ -10,9 +10,12 @@ using ip_filter::IpAddress;
 using ip_filter::parseIp;
 using ip_filter::printIp;
 
-void printIps(const std::vector<IpAddress>& ips) {
-    for (auto &ip : ips) {
-        std::cout << printIp(ip) << std::endl;
+template <typename Predicate>
+void printIpsIf(const std::vector<IpAddress>& ips, Predicate pred) {
+    for (auto& ip : ips) {
+        if (pred(ip)) {
+            std::cout << printIp(ip) << std::endl;
+        }
     }
 }
 
@@ -25,9 +28,23 @@ int main() {
         ips.emplace_back(std::move(ip));
     }
 
-    std::sort(std::begin(ips), std::end(ips), std::greater{});
+    auto sortedIps = ips; // copy
+    std::sort(begin(sortedIps), end(sortedIps), std::greater{});
 
-    printIps(ips);
+    // Полный список адресов после сортировки. Одна строка - один адрес
+    printIpsIf(sortedIps, [](const IpAddress&) { return true; });
+
+    // Сразу следом список адресов, первый байт которых равен 1. Порядок сортировки не меняется.
+    // Одна строка - один адрес. Списки ничем не разделяются
+    printIpsIf(ips, [](const IpAddress& ip) { return ip.bytes[0] == 1; });
+
+    // Сразу продолжается список адресов, первый байт которых равен 46, а второй 70. Порядок
+    // сортировки не меняется. Одна строка - один адрес. Списки ничем не разделяются
+    printIpsIf(ips, [](const IpAddress& ip) { return ip.bytes[0] == 46 && ip.bytes[1] == 70; });
+
+    // Сразу продолжается список адресов, любой байт которых равен 46. Порядок сортировки не
+    // меняется. Одна строка - один адрес. Списки ничем не разделяются
+    printIpsIf(ips, [](const IpAddress& ip) { return std::find(begin(ip.bytes), end(ip.bytes), 46) != end(ip.bytes); });
 
     return 0;
 }
