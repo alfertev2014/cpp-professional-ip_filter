@@ -28,11 +28,10 @@ int main() {
         ips.emplace_back(std::move(ip));
     }
 
-    auto sortedIps = ips; // copy
-    std::sort(begin(sortedIps), end(sortedIps), std::greater{});
+    std::sort(begin(ips), end(ips), std::greater{});
 
     // Полный список адресов после сортировки. Одна строка - один адрес
-    printIpsIf(sortedIps, [](const IpAddress&) { return true; });
+    printIpsIf(ips, [](const IpAddress&) { return true; });
 
     // Сразу следом список адресов, первый байт которых равен 1. Порядок сортировки не меняется.
     // Одна строка - один адрес. Списки ничем не разделяются

@@ -3,7 +3,6 @@
 #include <array>
 #include <cinttypes>
 #include <string_view>
-#include <vector>
 
 namespace ip_filter {
 
@@ -47,6 +46,5 @@ namespace ip_filter {
     IpAddress parseIp(std::string_view ipStr);
 
     std::string printIp(const IpAddress& ip);
-
 
 }
